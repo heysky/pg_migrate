@@ -1545,11 +1545,9 @@ migrate_one_table(migrate_table *table, const char *orderby, char *errbuf, size_
 	elog(DEBUG2, "---- create temp table ----");
 	command(create_table, 0, NULL);
 
-	if (alter_list.head != NULL)
-	{
-		if (!(apply_alter_statement(connection, table->target_oid, alter_list.head->val)))
-			goto cleanup;
-	}
+	if (alter_list.head != NULL &&
+		!(apply_alter_statement(connection, table->target_oid, alter_list.head->val)))
+		goto cleanup;
 
 	/* apply alter column statemnts (if any) */
 	resetStringInfo(&sql);
